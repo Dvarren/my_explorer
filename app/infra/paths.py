@@ -1,23 +1,26 @@
 import sys
+import os
 from pathlib import Path
 
 def app_dir() -> Path:
-    """Возвращает папку, где лежит main.py (корень проекта)"""
+    """Папка где лежит main.py"""
     if getattr(sys, "frozen", False):
         return Path(sys.executable).parent
-    
-    # __file__ указывает на app/infra/paths.py
-    # .parent -> app/infra
-    # .parent.parent -> app
-    # .parent.parent.parent -> my_explorer (наш корень)
     return Path(__file__).resolve().parent.parent.parent
 
 def data_dir() -> Path:
+    """Папка приложения data рядом с программой."""
     d = app_dir() / "data"
     d.mkdir(exist_ok=True)
     return d
 
-
-if __name__ == "__main__":
-    print("Путь к корню проекта:", app_dir())
-    print("Путь к папке data:", data_dir())
+def user_config_dir() -> Path:
+    """Папка для настроек в AppData"""
+    if sys.platform == "win32":
+        base = Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
+    else:
+        base = Path.home() / ".config"
+        
+    d = base / "MyExplorer"  # Название нашей программы
+    d.mkdir(parents=True, exist_ok=True)
+    return d

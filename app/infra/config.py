@@ -1,11 +1,11 @@
 import json
 from pathlib import Path
-from .paths import app_dir
+from .paths import user_config_dir
 
-CONFIG_FILE = app_dir() / "config.json"
+CONFIG_FILE = user_config_dir() / "config.json"
 
 DEFAULTS = {
-    "local_folder": str(Path.home() / "Documents") 
+    "local_folder": str(Path.home() / "Documents")
 }
 
 def load_config() -> dict:
@@ -14,8 +14,13 @@ def load_config() -> dict:
         return DEFAULTS
     try:
         with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-            return {**DEFAULTS, **json.load(f)}
-    except:
+            cfg = {**DEFAULTS, **json.load(f)}
+            
+            if not Path(cfg["local_folder"]).exists():
+                cfg["local_folder"] = DEFAULTS["local_folder"]
+                
+            return cfg
+    except Exception:
         return DEFAULTS
 
 def save_config(cfg: dict):
