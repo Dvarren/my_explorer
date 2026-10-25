@@ -7,6 +7,6 @@ if __name__ == "__main__":
     
     window = MainWindow()
     window.resize(800, 600)
-    window.showFullScreen() # На весь экран!
+    window.show()
     
     sys.exit(app.exec())
