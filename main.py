@@ -1,7 +1,12 @@
 import sys
-from PySide6.QtWidgets import QApplication, QLabel
+from PySide6.QtWidgets import QApplication
+from app.ui.main_window import MainWindow
 
-app = QApplication(sys.argv)
-label = QLabel("Привет, мир! PySide6 настроен.")
-label.show()
-sys.exit(app.exec())
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    
+    window = MainWindow()
+    window.resize(800, 600)
+    window.showFullScreen() # На весь экран!
+    
+    sys.exit(app.exec())
