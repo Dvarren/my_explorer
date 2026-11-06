@@ -15,23 +15,37 @@ class BrowserScreen(QWidget):
 
         layout = QVBoxLayout(self)
 
-        #Верхняя панель
+        # Верхняя панель
         top_bar = QHBoxLayout()
         
         self.btn_back = QPushButton("← Назад")
         self.btn_back.setFixedSize(100, 40)
-        self.btn_back.setStyleSheet("font-size: 16px;")
         self.btn_back.clicked.connect(self._go_back)
         
+        # Стиль для кнопки "Назад" (белый фон, синяя рамка)
+        self.btn_back.setStyleSheet("""
+            QPushButton {
+                color: #004394; 
+                font-weight: bold; 
+                font-size: 16px;
+                background-color: white; 
+                border: 2px solid #004394; 
+                border-radius: 5px; 
+            }
+            QPushButton:hover {
+                background-color: #E0E7FF; 
+            }
+        """)
+        
         self.path_label = QLabel("Путь")
-        self.path_label.setStyleSheet("font-size: 18px; font-weight: bold;")
+        self.path_label.setStyleSheet("font-size: 18px; font-weight: bold; color: #004394;")
         
         top_bar.addWidget(self.btn_back)
         top_bar.addWidget(self.path_label, 1)
         
         layout.addLayout(top_bar)
 
-        #Список файлов
+        # Список файлов
         self.model = FileListModel()
         self.view = QListView()
         self.view.setModel(self.model)
