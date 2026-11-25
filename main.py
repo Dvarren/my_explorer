@@ -9,7 +9,7 @@ if __name__ == "__main__":
     
     # Настройка иконки
     base_dir = Path(__file__).resolve().parent
-    # ВАЖНО: У вас файл называется icon.png.png, поэтому пишем именно так!
+    
     icon_path = base_dir / "icon.png.png" 
     
     if icon_path.exists():
@@ -24,4 +24,4 @@ if __name__ == "__main__":
     sys.exit(app.exec())
 
     #Максим чмопс
-    
+    #Messi Lox
