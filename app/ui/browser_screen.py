@@ -15,14 +15,12 @@ class BrowserScreen(QWidget):
 
         layout = QVBoxLayout(self)
 
-        # Верхняя панель
         top_bar = QHBoxLayout()
         
         self.btn_back = QPushButton("← Назад")
         self.btn_back.setFixedSize(100, 40)
         self.btn_back.clicked.connect(self._go_back)
         
-        # Стиль для кнопки "Назад" (белый фон, синяя рамка)
         self.btn_back.setStyleSheet("""
             QPushButton {
                 color: #004394; 
@@ -45,7 +43,6 @@ class BrowserScreen(QWidget):
         
         layout.addLayout(top_bar)
 
-        # Список файлов
         self.model = FileListModel()
         self.view = QListView()
         self.view.setModel(self.model)
@@ -55,13 +52,11 @@ class BrowserScreen(QWidget):
         layout.addWidget(self.view, 1)
 
     def open_provider(self, provider, path: str = ""):
-        """Вызывается из главного окна при выборе папки"""
         self.provider = provider
         self.current_path = path
         self.refresh()
 
     def refresh(self):
-        """Загружает файлы из провайдера и обновляет экран"""
         if not self.provider:
             return
             
@@ -73,14 +68,12 @@ class BrowserScreen(QWidget):
             QMessageBox.critical(self, "Ошибка", f"Не удалось прочитать папку:\n{e}")
 
     def _update_path_label(self):
-        """Показывает путь вроде 'Приложение / data / images'"""
         parts = [self.provider.root_label]
         if self.current_path:
             parts.extend(PurePosixPath(self.current_path).parts)
         self.path_label.setText(" / ".join(parts))
 
     def _go_back(self):
-        """Логика кнопки Назад"""
         if not self.current_path:
             self.main_window.show_home()
             return
@@ -93,7 +86,6 @@ class BrowserScreen(QWidget):
         self.refresh()
 
     def _on_double_click(self, index):
-        """Обработка двойного клика по файлу или папке"""
         entry = self.model.data(index, FileListModel.EntryRole)
         if not entry:
             return
@@ -102,7 +94,7 @@ class BrowserScreen(QWidget):
             self.current_path = entry.path
             self.refresh()
         else:
-            QMessageBox.information(
-                self, "Файл", 
-                f"Вы выбрали файл: {entry.name}\n\nОткрытие файлов сделаем на следующем шаге!"
-            )
+            try:
+                self.provider.open_file(entry.path)
+            except Exception as e:
+                QMessageBox.critical(self, "Ошибка", f"Не удалось открыть файл:\n{e}")

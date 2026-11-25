@@ -23,3 +23,8 @@ class LocalFolderProvider(StorageProvider):
                 is_dir=child.is_dir()
             ))
         return entries
+    
+    def open_file(self, rel_path: str):
+        import os
+        full_path = self.root / rel_path
+        os.startfile(str(full_path))

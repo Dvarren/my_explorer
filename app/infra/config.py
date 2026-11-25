@@ -5,7 +5,9 @@ from .paths import user_config_dir
 CONFIG_FILE = user_config_dir() / "config.json"
 
 DEFAULTS = {
-    "local_folder": str(Path.home() / "Documents")
+    "local_folder": str(Path.home() / "Documents"),
+    "cloud_url": "",
+    "cloud_token": ""
 }
 
 def load_config() -> dict:
